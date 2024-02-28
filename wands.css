@@ -1,0 +1,243 @@
+@font-face {
+    font-family: 'Magorian';
+    src: url('./fonts/MagorianSmart.ttf') format('truetype');
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Magorian', serif;
+    background: #141414;
+    color: #fff;
+    user-select: none;
+}
+
+.container {
+    display: flex;
+    height: 100%;
+}
+
+.questions, .answers-container {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 80px;
+}
+
+.questions {
+    background-color: #141414;
+    color: #fff;
+    font-size: 25px;
+    line-height: 1.6;
+}
+
+.answers-container {
+    background-color: #800080;
+    color: #fff;
+    position: relative;
+}
+
+.answer-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+}
+
+.answer {
+    font-size: 25px;
+    cursor: pointer;
+    margin: 20px 0;
+    line-height: 1.6;
+}
+
+/* Other styles remain unchanged */
+
+.arrow-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 220px 0; /* Maintaining the original spacing */
+    position: relative;
+    width: 30px; /* Width of the arrow */
+    height: 30px; /* Height of the arrow */
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.arrow-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: solid #fff;
+    border-width: 0 2px 2px 0; /* Arrow line thickness */
+    display: inline-block;
+    padding: 10px; /* Arrow line length */
+    transform: translate(-50%, -50%) rotate(-135deg); /* Up arrow */
+}
+
+#down-btn::before {
+    transform: translate(-50%, -50%) rotate(45deg); /* Down arrow */
+}
+
+.arrow-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: solid transparent;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 10px;
+    transform: translate(-50%, -50%) rotate(-135deg);
+    transition: all 0.3s ease;
+    opacity: 0; /* Hide the glow effect by default */
+}
+
+#down-btn::after {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.arrow-btn:hover::after {
+    border-color: rgba(255, 255, 255, 1); /* Fully opaque white border */
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5)) /* Primary glow */
+            drop-shadow(0 0 3px rgba(255, 255, 255, 0.5)) /* Secondary glow for more intensity */
+            drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)); /* Tertiary glow for an even stronger effect */
+    opacity: 1; /* Show the glow effect on hover */
+}
+
+
+.select-btn {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+    padding: 12px 28px;
+    cursor: pointer;
+    font-size: 1em;
+    text-transform: uppercase;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.select-btn:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.progress-indicator {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+.progress-dot {
+    width: 15px;
+    height: 15px;
+    margin: 10px 0;
+    border-radius: 50%;
+    background-color: #fff;
+    opacity: 0.5;
+}
+
+.progress-dot.active {
+    opacity: 1;
+}
+
+#result {
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for exact centering */
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #011a32; /* Dark blue background, adjust the color to match your theme */
+    color: #fff;
+    font-size: 2em;
+    line-height: 1.6;
+    display: none;
+    font-family: 'Magorian Regular', serif;
+    padding: 50px; /* Add some padding */
+    box-sizing: border-box;
+    border-radius: 10px; /* Optional: if you want rounded corners */
+}
+
+.result-container {
+    position: relative;
+    background-color: transparent; /* Make the container transparent */
+    max-width: 600px; /* Set a max width for the container */
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.badge-image {
+    width: 60%; /* Relative size to the container */
+    height: auto; /* Maintain aspect ratio */
+    margin-top: 2em;
+}
+
+.result-container h1 {
+    font-size: 60px; /* Larger font size */
+    color: #f0f0f0; /* Slightly off-white color for better readability */
+    margin: -.2em;
+    margin-bottom: 2em;
+    font-weight: normal;
+}
+
+.result-container p {
+    font-size: 35px; /* Adjust paragraph size as needed */
+    margin-bottom: 270px;
+}
+
+.result-container button {
+    position: relative; /* Change position to relative */
+    margin: 0 10px; /* Add some space between the buttons */
+    margin-top: 15px;
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+    padding: 12px 28px;
+    cursor: pointer;
+    font-size: 1em;
+    text-transform: uppercase;
+    transition: background-color 0.3s, color 0.3s;
+    bottom: 0; /* Align buttons to the bottom of the container */
+}
+
+.result-container button:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Optional: Add responsiveness for smaller screens */
+@media (max-width: 768px) {
+    .badge-image {
+        width: 80%; /* Increase size for smaller screens */
+    }
+
+    .result-container h1 {
+        font-size: 2.5em;
+    }
+
+    .result-container p {
+        font-size: 1em;
+    }
+}

@@ -92,7 +92,7 @@ body {
 #sort-btn, #wand-btn, #familiar-btn {
     width:200px;
     height:70px;
-    background: linear-gradient(to left top, #272831 50%, #282A36 50%);
+    background: linear-gradient(to left top, #272831 50%, #32343d 50%);
     border-style: none;
     color:#fff;
     font-size: 23px;

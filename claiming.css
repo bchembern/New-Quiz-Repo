@@ -1,158 +1,319 @@
-body{
-    
-    margin:0px;
-    background-color: rgba(194, 194, 250, 0.2);
+@font-face {
+    font-family: 'Magorian';
+    src: url('./fonts/MagorianSmart.ttf') format('truetype');
 }
 
-
-
-#heading img{
-    margin-left:25vw;
-    margin-top:4vw;
-    width:50vw;
-    height:80vh;
-    position: absolute;
-    z-index:-1;
-    box-shadow: 10px 10px 20px #222;
-       
+@font-face {
+    font-family: 'Roboto Regular';
+    src: url('./fonts/Roboto-Regular.woff') format('woff');
 }
 
-.one{
-    display: flex;
-    flex-direction: column;
-    justify-content: left;
-    align-items: center;
-    margin-top:5vw;
-    margin-left:28vw;
-    text-overflow: break-word;
-    width:25vw;
-    height:fit-content;
-}
-
-h1{
-    font-family: 'Merriweather', serif;
-    font-size:1.8em;
-    color:black;
-    font-display: bold;
-}
-
-h3{
-    font-family: 'Raleway', sans-serif;
-    text-align:center;
-    color: #011126;
-    font-size:1.2em;
-    text-overflow: break-word;
-}
-
-button{
-    
-    align-self: center;
-    font-family: 'Merriweather',serif;
-    font-size:1em;
-    font-display: bold;
-    border-radius:15px;
-    color:#fff;
-    background-color: #011126;
-}
-
-button:hover{
-    color:#DCDDD8;
-    background-color: #131b64;
-    box-shadow: 3px 3px 5px #222;
-    cursor: pointer;
-}
-
-
-
-#quiz section,.questions,.answers{
-    display: flex;
-    width:45vw;
-    height:fit-content;
-    margin-left:25vw;
-    margin-top:4vw;
-    justify-content: flex-start;
-    align-items: flex-start;
-    text-align: center;
-    text-overflow: break-word;
-
-
-}
-.questions{
-    padding-top:85px;
-    font-family:  'Merriweather',serif;
-    font-size:1.1em;
-    color:#fff;
-    margin:auto;
-    text-overflow: break-word;
-}
-.answers div{
-    display:inline-block;
-    margin:10px auto auto auto;
-    font-family: 'Raleway', sans-serif;
-    margin:auto;
-    padding:10px;
-    font-display: bold;
-    color:#011126;
-    font-size:1em;
-    border-radius: 15px;
-    border: 1.5px #222;
-    background-color: #DCDDD8;
-    width:48.5vw;
-    align-self:center;
-}
-.answers{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-}
-
-.answers div:hover{
-    color:rgb(136, 180, 247);
-    background-color: #666;
-    cursor: pointer;
-}
-
-#quiz section{
-    margin-left:25vw;
-    margin-top:4vw;
-    width:51vw;
-    height:80vh;
-    position: absolute;
-    z-index: -2;
-    box-shadow: 10px 10px 20px #222;
-    background-color: #011126;
-    color:#fff;
-}
-
-#result{
-    margin-left:25vw;
-    margin-top:4vw;
-    width:51vw;
-    height:80vh;
-    position: absolute;
-    z-index: -1;
-}
-h2{
-    font-family: 'Merriweather', serif;
-    font-size:2.3em;
-    color:#000;
-    font-display: bold;
-    
-    margin-top:35px;
-    text-align:center;
-}
-
-#result button{
-    background-color: #000;
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Magorian', serif;
+    background: #141414;
     color: #fff;
-    margin-top:220px;
-    margin-left:270px;
-    padding:7px 15px;
+    user-select: none;
 }
 
-#result button:hover{
-    background-color:#222;
-    color: #DCDDD8;
-    box-shadow: 3px 3px 5px #222;
+.container {
+    display: flex;
+    height: 100vh; /* Use vh for full viewport height */
+    width: 100vw; /* Use vw for full viewport width */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.questions, .answers-container {
+    flex: 1; /* Both children should take up equal space */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    
+}
+
+.questions {
+    background-color: #141414;
+    color: #fff;
+    font-size: 25px;
+    line-height: 1.6;
+}
+
+.answers-container {
+    width: 50%; /* Take up half of the flex container */
+    position: relative;
+    overflow: hidden; /* To clip the inner content */
+    padding: 0;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    /* Remove any additional styling that might conflict with the width */
+}
+
+.answer-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden; /* Ensures that content outside this container isn't shown */
+}
+
+.answer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 25px;
+}
+
+.answer-card {
+    position: absolute;
+    top: 0;
+    left: 0; /* Align the card to the top-left corner of the container */
+    width: 100%; /* Ensure card stretches to full container width */
+    height: 100%; /* Ensure card stretches to full container height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.5s ease;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+
+.arrow-btn {
+    background-color: transparent;
+    border: none;
     cursor: pointer;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+#up-btn {
+    top: 280px; /* Adjust as necessary */
+    left: 50%;
+    transform: translateX(-50%) rotate(-135deg);
+    z-index: 10;
+}
+
+#down-btn {
+    bottom: 280px; /* Adjust as necessary */
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.arrow-btn::before, .arrow-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.arrow-btn:hover::after {
+    border-color: rgba(255, 255, 255, 1);
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5))
+            drop-shadow(0 0 3px rgba(255, 255, 255, 0.5))
+            drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+    opacity: 1;
+}
+
+
+.select-btn {
+    font: 12px/18px "Roboto Regular", sans;
+    letter-spacing: 1.5px;
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+    padding: 8px 24px;
+    cursor: pointer;
+    font-size: 1em;
+    text-transform: uppercase;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.select-btn:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.scroll-smooth {
+    scroll-behavior: smooth;
+}
+
+
+.progress-indicator {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+.progress-dot {
+    width: 15px;
+    height: 15px;
+    margin: 8px 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5); /* Semi-transparent white for inactive dots */
+    position: relative;
+    transition: background-color 0.3s; /* Transition for the dot background */
+}
+
+.progress-dot::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    transform: scale(0); /* Start from center and invisible */
+    transition: transform 0.3s ease-out; /* Smooth transition for transform changes */
+    will-change: transform;
+}
+
+.progress-dot.active::after {
+    animation: pop-in .35s forwards; /* Animation when the dot becomes active */
+    animation-fill-mode: forwards; /* Ensure the state is maintained after animation ends */
+}
+
+@keyframes pop-in {
+    0% {
+        transform: scale(0); /* Start from the center */
+    }
+    100% {
+        transform: scale(1); /* Return to the actual size */
+    }
+}
+
+@keyframes shrink-out {
+    0% {
+        transform: scale(1); /* Ensure starting at full size */
+    }
+    100% {
+        transform: scale(0); /* Shrink to center */
+    }
+}
+
+.progress-dot.shrink::after {
+    animation: shrink-out 0.4s forwards; /* Apply the shrinking animation */
+    animation-fill-mode: forwards; /* Ensure the state is maintained after animation ends */
+}
+
+.progress-dot.hidden {
+    display: none; /* Hide the dot */
+}
+
+.progress-dot.no-animation::after,
+.progress-dot.no-animation {
+    transition: none !important;
+    animation: none !important;
+}
+
+
+#result {
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for exact centering */
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #011a32; /* Dark blue background, adjust the color to match your theme */
+    color: #fff;
+    font-size: 2em;
+    line-height: 1.6;
+    display: none;
+    font-family: 'Magorian Regular', serif;
+    padding: 50px; /* Add some padding */
+    box-sizing: border-box;
+    border-radius: 10px; /* Optional: if you want rounded corners */
+}
+
+.result-container {
+    position: relative;
+    background-color: transparent; /* Make the container transparent */
+    max-width: 600px; /* Set a max width for the container */
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.badge-image {
+    width: 60%; /* Relative size to the container */
+    height: auto; /* Maintain aspect ratio */
+    margin-top: 2em;
+}
+
+.result-container h1 {
+    font-size: 60px; /* Larger font size */
+    color: #f0f0f0; /* Slightly off-white color for better readability */
+    margin: -.2em;
+    margin-bottom: 2em;
+    font-weight: normal;
+}
+
+.result-container p {
+    font-size: 35px; /* Adjust paragraph size as needed */
+    margin-bottom: 270px;
+}
+
+.result-container button {
+    font: 12px/18px "Roboto Regular", sans;
+    letter-spacing: 1.5px;
+    position: relative; /* Change position to relative */
+    margin: 0 10px; /* Add some space between the buttons */
+    margin-top: 15px;
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+    padding: 12px 28px;
+    cursor: pointer;
+    font-size: 1em;
+    text-transform: uppercase;
+    transition: background-color 0.3s, color 0.3s;
+    bottom: 0; /* Align buttons to the bottom of the container */
+}
+
+.result-container button:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Optional: Add responsiveness for smaller screens */
+@media (max-width: 768px) {
+    .badge-image {
+        width: 80%; /* Increase size for smaller screens */
+    }
+
+    .result-container h1 {
+        font-size: 2.5em;
+    }
+
+    .result-container p {
+        font-size: 1em;
+    }
 }

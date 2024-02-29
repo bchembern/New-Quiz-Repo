@@ -3,6 +3,11 @@
     src: url('./fonts/MagorianSmart.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'Roboto Regular';
+    src: url('./fonts/Roboto-Regular.woff') format('woff');
+}
+
 body, html {
     height: 100%;
     margin: 0;
@@ -40,80 +45,88 @@ body, html {
     background-color: #800080;
     color: #fff;
     position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .answer-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
+    width: 100%;
     height: 100%;
+    position: relative;
+    overflow: hidden; /* Ensures that content outside this container isn't shown */
 }
 
 .answer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
     font-size: 25px;
-    cursor: pointer;
-    margin: 20px 0;
-    line-height: 1.6;
 }
 
-/* Other styles remain unchanged */
+.answer-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.5s ease;
+}
+
 
 .arrow-btn {
     background-color: transparent;
     border: none;
     cursor: pointer;
-    margin: 220px 0; /* Maintaining the original spacing */
-    position: relative;
-    width: 30px; /* Width of the arrow */
-    height: 30px; /* Height of the arrow */
-    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    transition: all 0.3s ease;
+    z-index: 10;
 }
 
-.arrow-btn::before {
+#up-btn {
+    top: 280px; /* Adjust as necessary */
+    left: 50%;
+    transform: translateX(-50%) rotate(-135deg);
+    z-index: 10;
+}
+
+#down-btn {
+    bottom: 280px; /* Adjust as necessary */
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.arrow-btn::before, .arrow-btn::after {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
     border: solid #fff;
-    border-width: 0 2px 2px 0; /* Arrow line thickness */
-    display: inline-block;
-    padding: 10px; /* Arrow line length */
-    transform: translate(-50%, -50%) rotate(-135deg); /* Up arrow */
-}
-
-#down-btn::before {
-    transform: translate(-50%, -50%) rotate(45deg); /* Down arrow */
-}
-
-.arrow-btn::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    border: solid transparent;
     border-width: 0 2px 2px 0;
     display: inline-block;
     padding: 10px;
-    transform: translate(-50%, -50%) rotate(-135deg);
     transition: all 0.3s ease;
-    opacity: 0; /* Hide the glow effect by default */
-}
-
-#down-btn::after {
-    transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .arrow-btn:hover::after {
-    border-color: rgba(255, 255, 255, 1); /* Fully opaque white border */
-    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5)) /* Primary glow */
-            drop-shadow(0 0 3px rgba(255, 255, 255, 0.5)) /* Secondary glow for more intensity */
-            drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)); /* Tertiary glow for an even stronger effect */
-    opacity: 1; /* Show the glow effect on hover */
+    border-color: rgba(255, 255, 255, 1);
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5))
+            drop-shadow(0 0 3px rgba(255, 255, 255, 0.5))
+            drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+    opacity: 1;
 }
 
 
 .select-btn {
+    font: 12px/18px "Roboto Regular", sans;
+    letter-spacing: 1.5px;
     position: absolute;
     bottom: 50px;
     left: 50%;
@@ -121,7 +134,7 @@ body, html {
     background-color: transparent;
     color: #fff;
     border: 1px solid #fff;
-    padding: 12px 28px;
+    padding: 8px 24px;
     cursor: pointer;
     font-size: 1em;
     text-transform: uppercase;
@@ -132,6 +145,11 @@ body, html {
     background-color: #fff;
     color: #000;
 }
+
+.scroll-smooth {
+    scroll-behavior: smooth;
+}
+
 
 .progress-indicator {
     display: flex;
@@ -145,15 +163,66 @@ body, html {
 .progress-dot {
     width: 15px;
     height: 15px;
-    margin: 10px 0;
+    margin: 8px 0;
     border-radius: 50%;
-    background-color: #fff;
-    opacity: 0.5;
+    background: rgba(255,255,255,0.5); /* Semi-transparent white for inactive dots */
+    position: relative;
+    transition: background-color 0.3s; /* Transition for the dot background */
 }
 
-.progress-dot.active {
-    opacity: 1;
+.progress-dot::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    transform: scale(0); /* Start from center and invisible */
+    transition: transform 0.3s ease-out; /* Smooth transition for transform changes */
+    will-change: transform;
 }
+
+.progress-dot.active::after {
+    animation: pop-in .35s forwards; /* Animation when the dot becomes active */
+    animation-fill-mode: forwards; /* Ensure the state is maintained after animation ends */
+}
+
+@keyframes pop-in {
+    0% {
+        transform: scale(0); /* Start from the center */
+    }
+    100% {
+        transform: scale(1); /* Return to the actual size */
+    }
+}
+
+@keyframes shrink-out {
+    0% {
+        transform: scale(1); /* Ensure starting at full size */
+    }
+    100% {
+        transform: scale(0); /* Shrink to center */
+    }
+}
+
+.progress-dot.shrink::after {
+    animation: shrink-out 0.4s forwards; /* Apply the shrinking animation */
+    animation-fill-mode: forwards; /* Ensure the state is maintained after animation ends */
+}
+
+.progress-dot.hidden {
+    display: none; /* Hide the dot */
+}
+
+.progress-dot.no-animation::after,
+.progress-dot.no-animation {
+    transition: none !important;
+    animation: none !important;
+}
+
 
 #result {
     position: absolute;
@@ -208,6 +277,8 @@ body, html {
 }
 
 .result-container button {
+    font: 12px/18px "Roboto Regular", sans;
+    letter-spacing: 1.5px;
     position: relative; /* Change position to relative */
     margin: 0 10px; /* Add some space between the buttons */
     margin-top: 15px;

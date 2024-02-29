@@ -95,52 +95,131 @@ let currentAnswerIndex = 0;
 function loadQuestion() {
   const questionDiv = document.getElementById('questions');
   questionDiv.innerText = allQuestions[currentQuestionIndex];
+  adjustProgressDots(allAnswers[currentQuestionIndex].length);
   loadAnswers();
 }
 
 function loadAnswers() {
   const answerDiv = document.getElementById('answer');
+  answerDiv.innerHTML = ''; // Clear previous answers
   const answers = allAnswers[currentQuestionIndex];
-  answerDiv.innerText = answers[currentAnswerIndex];
-  updateProgressIndicator();
-}
-
-function updateProgressIndicator() {
-  const progressIndicator = document.getElementById('progress-indicator');
-  progressIndicator.innerHTML = '';
-  allAnswers[currentQuestionIndex].forEach((_, index) => {
-    const dot = document.createElement('div');
-    dot.className = 'progress-dot';
-    if (index === currentAnswerIndex) {
-      dot.classList.add('active');
-    }
-    progressIndicator.appendChild(dot);
+  
+  answers.forEach((text, index) => {
+    const card = document.createElement('div');
+    card.className = 'answer-card';
+    card.innerText = text;
+    card.style.top = `${index * 100}%`; // Stack the cards on top of each other
+    answerDiv.appendChild(card);
+    resetProgressIndicator();
+    updateProgressIndicator();
   });
 }
 
-document.getElementById('up-btn').addEventListener('click', () => {
-  currentAnswerIndex = (currentAnswerIndex - 1 + allAnswers[currentQuestionIndex].length) % allAnswers[currentQuestionIndex].length;
-  loadAnswers();
-});
 
-document.getElementById('down-btn').addEventListener('click', () => {
-  currentAnswerIndex = (currentAnswerIndex + 1) % allAnswers[currentQuestionIndex].length;
-  loadAnswers();
-});
+function adjustProgressDots(numberOfAnswers) {
+  const progressDots = document.querySelectorAll('.progress-dot');
+  progressDots.forEach((dot, index) => {
+      if (index < numberOfAnswers) {
+          dot.classList.remove('hidden');
+      } else {
+          dot.classList.add('hidden');
+      }
+  });
+}
 
+function resetProgressIndicator() {
+  const allDots = document.querySelectorAll('.progress-dot');
+  allDots.forEach(dot => {
+      dot.classList.remove('active', 'shrink');
+      dot.classList.add('no-animation'); // Temporarily disable animations
+  });
+
+  // Ensure that the first answer appears selected without animation
+  allDots[0].classList.add('active');
+
+  // Use setTimeout to re-enable animations after the initial state is set
+  setTimeout(() => {
+      allDots.forEach(dot => {
+          dot.classList.remove('no-animation');
+      });
+  }, 10); // Short delay to allow the browser to apply no-animation styles
+}
+
+let isAnimating = false;
+
+function updateProgressIndicator() {
+  const allDots = document.querySelectorAll('.progress-dot');
+  
+  allDots.forEach((dot, index) => {
+      if (index === currentCardIndex) {
+          // If this is the currently active dot, add 'active'
+          dot.classList.add('active');
+          dot.classList.remove('shrink'); // Ensure 'shrink' is not applied
+      } else {
+          // For all other dots, remove 'active'
+          dot.classList.remove('active');
+
+          // If a dot was previously active, add 'shrink' to trigger the animation
+          if (dot.classList.contains('was-active')) {
+              dot.classList.add('shrink');
+              dot.classList.remove('was-active');
+          }
+      }
+
+      // Mark the current active dot for future reference
+      if (dot.classList.contains('active')) {
+          dot.classList.add('was-active');
+      }
+  });
+
+  setTimeout(() => {
+      isAnimating = false;
+  }, 300); // Adjust based on animation duration
+}
+
+function updateClassWithRAF(element, newClass) {
+  window.requestAnimationFrame(() => {
+      element.classList.add(newClass);
+  });
+}
 
 document.getElementById('select-btn').addEventListener('click', () => {
-  const selectedHouse = houseType[currentQuestionIndex][currentAnswerIndex];
+  const selectedHouse = houseType[currentQuestionIndex][currentCardIndex];
   scores[selectedHouse] += 1;
 
   if (currentQuestionIndex < allQuestions.length - 1) {
     currentQuestionIndex++;
-    currentAnswerIndex = 0; // Reset for next question
+    currentCardIndex = 0; // Reset for next question
     loadQuestion();
+    loadAnswers();
+    updateCardsPosition(); // Needed to reset card position for new answers
   } else {
     displayResult();
   }
 });
+
+document.getElementById('up-btn').addEventListener('click', () => {
+  const answers = allAnswers[currentQuestionIndex];
+  currentCardIndex = (currentCardIndex - 1 + answers.length) % answers.length;
+  updateCardsPosition();
+});
+
+document.getElementById('down-btn').addEventListener('click', () => {
+  const answers = allAnswers[currentQuestionIndex];
+  currentCardIndex = (currentCardIndex + 1) % answers.length;
+  updateCardsPosition();
+});
+
+let currentCardIndex = 0;
+
+function updateCardsPosition() {
+  const cards = document.querySelectorAll('.answer-card');
+  const offset = currentCardIndex * 100;
+  cards.forEach(card => {
+    card.style.transform = `translateY(-${offset}%)`; // Move cards up or down
+  });
+  updateProgressIndicator();
+}
 
 function loadConfettiScript(houseName) {
   var script = document.createElement('script');
